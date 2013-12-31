@@ -114,7 +114,7 @@ for line, n in zip(lines, range(1, len(lines)+1)):
 	else:
 		cls = ""
 	new_text += "<a href=" + mailto(mail, name + ": " + str(n), line) + cls + ">"
-	new_text += str(n) + "   "
+	new_text += " " + str(n) + 3*" "
 	new_text += "</a><br>"
 new_text += "</pre></td>"
 
