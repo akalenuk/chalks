@@ -22,20 +22,21 @@ import cgi
 import random
 import tempfile
 import webbrowser
+import hashlib
 
 separators = " @(){}[],.:;\"\'`<>=+-*/\t\n\\?|&#"
 safe_separators = {}
 
 for s in separators:
-	safe_separators[s] = cgi.escape(s, quote = True)
+    safe_separators[s] = cgi.escape(s, quote = True)
 
 n = 0
 lines = []
 chunks = set()
 chunk_ns = {}
 if len(sys.argv)==1:
-	print "Select file."
-	exit(1)
+    print "Select file."
+    exit(1)
 
 name = sys.argv[1]
 f = open(name)
@@ -46,97 +47,97 @@ f.close()
 
 word = ""
 for line in lines:
-	for c in line:
-		if c in separators:
-			if word != "":
-				chunks.add(word)
-				if word in chunk_ns:
-					chunk_ns[word] += 1
-				else:
-					chunk_ns[word] = 1
-			word = ""
-		else:
-			word += c
+    for c in line:
+        if c in separators:
+            if word != "":
+                chunks.add(word)
+                if word in chunk_ns:
+                    chunk_ns[word] += 1
+                else:
+                    chunk_ns[word] = 1
+            word = ""
+        else:
+            word += c
 
 
 def color_of(word):
-	if ord(word[0]) >= 128:
-		return "909090"
-	def to_ff(x):
-		y = hex( int(x) )[2:]
-		if len(y) == 1:
-			return "0"+y
-		else:
-			return y
-	random.seed(word)
-	word_n = random.random() * 2147483648
-	r = (word_n % 140) + 100;
-	g = (word_n / 140 % 130) + 100;
-	b = (word_n / 140 / 130 % 140) + 100;
-	return to_ff(r) + to_ff(g) + to_ff(b)
+    if ord(word[0]) >= 128:
+        return "909090"
+    def to_ff(x):
+        y = hex( int(x) )[2:]
+        if len(y) == 1:
+            return "0"+y
+        else:
+            return y
+    random.seed(word)
+    word_n = random.random() * 2147483648
+    r = (word_n % 140) + 100;
+    g = (word_n / 140 % 130) + 100;
+    b = (word_n / 140 / 130 % 140) + 100;
+    return to_ff(r) + to_ff(g) + to_ff(b)
 
 chunks_col = {}
 for chunk in chunks:
-	color = color_of(chunk);
-	chunks_col[chunk] = color
+    color = color_of(chunk);
+    chunks_col[chunk] = color
 
 
 mail = ""
 for line in lines:
-	mail_if_any = re.search(r"[\w.]+@[\w.]+", line)
-	if mail_if_any != None:
-		mail = mail_if_any.group(0)
-		break
-				
+    mail_if_any = re.search(r"[\w.]+@[\w.]+", line)
+    if mail_if_any != None:
+        mail = mail_if_any.group(0)
+        break
+                
 
 style = """
 a {color:#777; text-decoration:none;}
 a.ten {color:#BBB; text-decoration:none;}
 a:hover {color:#CBC}
-body { 	background-color:#000; 
-	color:#BAB; 
-	background: linear-gradient(90deg, #030303 0%, #080808 50%, #030303 100%);
+body {     background-color:#000; 
+    color:#BAB; 
+    background: linear-gradient(90deg, #030303 0%, #080808 50%, #030303 100%);
 } 
 """
 
 def mailto(mail, subj, text):
-	return "\"mailto:" + mail + "?subject=" + subj + " &body=" + cgi.escape(text, quote = True) + "\""
-	
-	
+    return "\"mailto:" + mail + "?subject=" + subj + " &body=" + cgi.escape(text, quote = True) + "\""
+    
+    
 new_text = "<html><head><title>" + name + "</title><style>" + style + "</style></head><body>"
 new_text += "<table><tr>"
 
 # numbers
 new_text += "<td><pre>"
-for line, n in zip(lines, range(1, len(lines)+1)):
-	if n % 10 == 0:
-		cls = " class=\"ten\""
-	else:
-		cls = ""
-	new_text += "<a href=" + mailto(mail, name + ": " + str(n), line) + cls + ">"
-	new_text += " " + str(n) + 3*" "
-	new_text += "</a><br>"
+for n, line in enumerate(lines, 1):
+    if n % 10 == 0:
+        cls = " class=\"ten\""
+    else:
+        cls = ""
+    new_text += "<a href=" + mailto(mail, name + ": " + str(n), line) + cls + ">"
+    new_text += " " + str(n) + 3*" "
+    new_text += "</a><br>"
 new_text += "</pre></td>"
 
 # code
 word = ""
 new_text += "<td><pre>"
-for line, n in zip(lines, range(1, len(lines)+1)):
-	for c in line:
-		if c in separators:
-			if word != "":
-				i = ""
-				uni = ""
-				if chunk_ns[word] == 1:
-					i = "<i>"
-					uni = "</i>"
-				new_text += "<font color=\"#" + chunks_col[word] + "\">" + i + word + uni + "</font>"
-				word = ""
-			new_text += safe_separators[c]
-		else:
-			word += c
-	n += 1
-new_text += "</pre></td>"	
+for n, line in enumerate(lines, 1):
+    for c in line:
+        if c in separators:
+            if word != "":
+                i = ""
+                uni = ""
+                if chunk_ns[word] == 1:
+                    i = "<i>"
+                    uni = "</i>"
+                new_text += "<font color=\"#" + chunks_col[word] + "\">" + i + word + uni + "</font>"
+                word = ""
+            new_text += safe_separators[c]
+        else:
+            word += c
+    n += 1
+new_text += "</pre></td>"    
 
 new_text += "</tr></table>"
 new_text += "</body></html>"
