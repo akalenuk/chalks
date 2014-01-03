@@ -94,9 +94,21 @@ style = """
 a {color:#777; text-decoration:none;}
 a.ten {color:#BBB; text-decoration:none;}
 a:hover {color:#CBC}
-body {     background-color:#000; 
-    color:#BAB; 
-    background: linear-gradient(90deg, #030303 0%, #080808 50%, #030303 100%);
+body {  
+    background-color:#000; 
+	color:#BAB; 
+	background: linear-gradient(
+	    to right, 
+        #030303 10%, #040404 10%, 
+        #040404 20%, #050505 20%, 
+        #050505 30%, #060606 30%, 
+        #060606 40%, #070707 40%, 
+        #070707 50%, #080808 50%, 
+        #080808 60%, #070707 60%, 
+        #070707 70%, #060606 70%, 
+        #060606 80%, #050505 80%, 
+        #050505 90%, #040404 90% 
+    );
 } 
 """
 
