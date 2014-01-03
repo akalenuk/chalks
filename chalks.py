@@ -96,9 +96,9 @@ a.ten {color:#BBB; text-decoration:none;}
 a:hover {color:#CBC}
 body {  
     background-color:#000; 
-	color:#BAB; 
-	background: linear-gradient(
-	    to right, 
+    color:#BAB; 
+    background: linear-gradient(
+        to right, 
         #030303 10%, #040404 10%, 
         #040404 20%, #050505 20%, 
         #050505 30%, #060606 30%, 
