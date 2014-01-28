@@ -24,7 +24,7 @@ import tempfile
 import webbrowser
 import hashlib
 
-separators = " @(){}[],.:;\"\'`<>=+-*/\t\n\\?|&#"
+separators = " @(){}[],.:;\"\'`<>=+-*/\t\n\\?|&#%"
 safe_separators = {}
 
 for s in separators:
