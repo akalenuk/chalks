@@ -44,12 +44,13 @@ def match(pattern, line):	# works for '*' and '?'
 	def find_with_question(pattern, line, start = 0):
 		if len(pattern) > len(line):
 			return -1
-		if [1 for (a,b) in zip(pattern, line) if a != b and a != '?'] == []:
+		differences = [1 for (a,b) in zip(pattern, line) if a != b and a != '?']
+		if differences == []:
 			return start
 		return find_with_question(pattern, line[1:], start+1)
 
-	chunks = [chunk for chunk in pattern.split('*') if chunk != ""]
-
+	chunks = ('\0' + pattern + '\0').split("*") 
+	
 	def check_order(chunks, line):
 		if chunks == []:
 			return True
@@ -58,7 +59,7 @@ def match(pattern, line):	# works for '*' and '?'
 			return False
 		return check_order(chunks[1:], line[n + len(chunks[0]):])
 	
-	return check_order(chunks, line)
+	return check_order(chunks, '\0' + line + '\0')
 
 	
 ls = os.listdir(".")
@@ -68,6 +69,7 @@ for arg in sys.argv[1:]:
 
 if names == []:
 	print "None of files match."	
+	exit(1)
 
 style = """
 a {color:#777; text-decoration:none;}
