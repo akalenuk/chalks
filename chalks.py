@@ -211,4 +211,4 @@ f = tempfile.NamedTemporaryFile(delete=False, suffix=".html")
 f.write(new_text)
 f.close()
 
-webbrowser.open(url=f.name)
+webbrowser.open('file://'+f.name)
