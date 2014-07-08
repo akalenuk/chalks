@@ -25,7 +25,7 @@ import random
 import tempfile
 import webbrowser
 
-separators = " @(){}[],.:;\"\'`<>=+-*/\t\n\\?|&#%"
+separators = " @(){}[],.:;\"\'`<>=+-*/\t\n\\?|&#%!"
 safe_separators = {}
 
 for s in separators:
@@ -163,7 +163,7 @@ for name in names:
 	new_text += "<table><tr>"
 
 	# numbers
-	new_text += "<td><pre>"
+	new_text += "<td valign='top'><pre>"
 	for line, n in zip(lines, range(1, len(lines)+1)):
 		if n % 10 == 0:
 			cls = " class=\"ten\""
@@ -176,7 +176,7 @@ for name in names:
 
 	# code
 	word = ""
-	new_text += "<td><pre>"
+	new_text += "<td valign='top'><pre>"
 	for line, n in zip(lines, range(1, len(lines)+1)):
 		for c in line:
 			if c in separators:
@@ -211,4 +211,4 @@ f = tempfile.NamedTemporaryFile(delete=False, suffix=".html")
 f.write(new_text)
 f.close()
 
-webbrowser.open('file://'+f.name)
+webbrowser.open(url=f.name)
