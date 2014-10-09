@@ -3,7 +3,7 @@
 from distutils.core import setup
 
 setup(name='Chalks',
-      version='1.0',
+      version='1.2',
       description='Code viewer',
       author='Alexandr Kalenuk',
       author_email='akalenuk@gmail.com',
